@@ -8,55 +8,42 @@ from PIL import Image, ImageDraw, ImageFont
 DATA_DIR = path.abspath(path.dirname(__file__))
 
 
-class ImgCaptcha:
-    def __init__(self, c_height=200, c_width=600, red=None,
-                 green=None, blue=None,
-                 font_type=None, font_color="WHITE", font_size=50):
-        self.Height = c_height
-        self.Width = c_width
-        self.rgb_colors = self.color_gen(red, green, blue)
-        self.font_type = font_type
-        self.font_color = font_color
-        self.font_size = font_size
-        self.select_font()
+class GenCaptchaString:
+    def __init__(self, string_length, constants=("U", "L", "D")):
+        """
+        :param constants: The mixture of characters for captcha
+        """
+        self.string_length = string_length
+        self.constants = constants
+        self.string_constants = {
+            "U": string.ascii_uppercase,
+            "L": string.ascii_lowercase,
+            "D": string.digits,
+            "P": string.punctuation
+        }
+        self.all_string = ""
+        for case in self.constants:
+            self.all_string += self.string_constants[case]
+
+    def gen_random_str(self, length=6):
+        """
+        :param length: Length of Captcha
+        :return: Captcha String
+        """
+        captcha_string = ''.join(random.choices(self.all_string,
+                                                k=self.string_length))
+        return captcha_string
+
+
+class AddImage:
+    def __init__(self):
+        self.font_type = None
+        self.font_size = None
+        self.font_color = None
+        self.Width = None
+        self.Height = None
         self._Image = None
-        self._Image_New = None
-        self.Draw = None
-        self.Image_Buf = None
-
-    def select_font(self):
-        if self.font_type is not None:
-            return self.font_type
-        fonts = glob(path.join(DATA_DIR, "Fonts", "*.ttf"))
-        self.font_type = fonts[random.randint(0, len(fonts) - 1)]
-
-    @staticmethod
-    def color_gen(red, green, blue):
-        red = random.randint(50, 255) if red is None else red
-        green = random.randint(50, 255) if green is None else green
-        blue = random.randint(50, 255) if blue is None else blue
-        return red, green, blue
-
-    def gen_image(self, captcha_string=None, captcha_length=6):
-        if captcha_string is None:
-            captcha_string = gen_random(captcha_length)
-        self._Image = Image.new(mode='RGBA', size=(self.Width, self.Height),
-                                color=self.rgb_colors)
-        letter_width = (self.Width // len(captcha_string))
-        self.draw_letters(captcha_string=captcha_string, width=letter_width)
-        self.__add_noise()
-
-    def show_image(self):
-        self._Image.show()
-
-    def save_image(self, filename="Captcha.png", file_format="PNG"):
-        """
-        Save the Image to given path
-        :param filename: /file/path/filename
-        :param file_format: format extension of image
-        :return:
-        """
-        self._Image.save(filename, format=file_format)
+        self.rgb_colors = None
 
     def draw_letters(self, captcha_string, width):
         """
@@ -89,10 +76,9 @@ class ImgCaptcha:
             self._Image.paste(rotated_img, (x_offset, 0), mask=rotated_img)
             x_offset += new_text_img.size[0]
 
-    def __add_noise(self, density=1000):
+    def _add_noise(self, density=1000):
         def rand_int(start, end):
             return random.randint(start, end)
-
         line_x1 = rand_int(0, self.Width * .3)
         line_x2 = rand_int(self.Width * 0.60, self.Width)
         line_y1 = rand_int(self.Height * 0.25, self.Height * 0.75)
@@ -113,29 +99,45 @@ class ImgCaptcha:
         obj.line(cords, width=line_width, fill=self.font_color)
 
 
-def gen_random(length=6, constants=None):
-    """
-    :param constants: The mixture of characters for captcha
-    :param length: Length of Captcha
-    :return: Captcha String
-    """
-    if constants is None:
-        constants = ["U", "L", "D"]
-    string_constants = {
-        "U": string.ascii_uppercase,
-        "L": string.ascii_lowercase,
-        "D": string.digits,
-        "P": string.punctuation
-    }
-    all_string = ""
-    for case in constants:
-        all_string += string_constants[case]
-    captcha_string = ''.join(random.choices(all_string, k=length))
-    return captcha_string
+class ImageCaptcha(GenCaptchaString, AddImage):
+    def __init__(self, c_height=200, c_width=600, c_color="#B89843",
+                 font_type=None, font_color="WHITE", font_size=50,
+                 string_length=6, string_constants=("U", "L", "D")):
+        GenCaptchaString.__init__(self, string_length, string_constants)
+        AddImage.__init__(self)
+        self.Height = c_height
+        self.Width = c_width
+        self.rgb_colors = c_color
+        self.font_type = path.join(DATA_DIR, "Fonts", "InriaSerif-Regular.ttf")
+        self.font_color = font_color
+        self.font_size = font_size
+        self._Image = None
+        self._Image_New = None
+        self.Draw = None
+        self.Image_Buf = None
+
+    def generate(self, captcha_string=None, noise_density=1000):
+        if captcha_string is None:
+            captcha_string = self.gen_random_str()
+        self._Image = Image.new(mode='RGBA', size=(self.Width, self.Height),
+                                color=self.rgb_colors)
+        letter_width = (self.Width // len(captcha_string))
+        self.draw_letters(captcha_string=captcha_string, width=letter_width)
+        self._add_noise(density=noise_density)
+        return captcha_string
+
+    def save_image(self, filename="Captcha.png", file_format="PNG"):
+        self._Image.save(filename, format=file_format)
+
+    def im_bytes(self, encoder="raw"):
+        return self._Image.tobytes(encoder_name=encoder)
+
+    def show_image(self):
+        self._Image.show()
 
 
 if __name__ == "__main__":
-    image = ImgCaptcha()
-    image.gen_image()
+    image = ImageCaptcha()
+    image.generate()
+    image.save_image()
     image.show_image()
-    image.save_image("Captcha1.png")
