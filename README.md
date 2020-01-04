@@ -9,7 +9,7 @@ Initialisation with captcha customisation arguments
 ![Captcha Image Sample](Images/Captcha.png)
 
 ### Captcha Height and Width
-    c_height=200, c_width=600, red=None,
+    c_height=200, c_width=600
 
 #### Captcha Colors(default is "#B89843")  
 Use hexadecimal colors, HTML color names, etc, use [Pil
