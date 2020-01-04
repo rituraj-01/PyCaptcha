@@ -1,7 +1,7 @@
 # PyCaptcha
 Image and Audio captcha generation using python
 
-## ImgCaptcha
+## ImgageCaptcha
 Initialisation with captcha customisation arguments
 ```
     image = ImageCaptcha()
@@ -65,3 +65,10 @@ Returns bytes
     
 ## Audio Captcha Under Development
 -------------------
+
+
+# Resources
+Using [Pillow](https://pillow.readthedocs.io/en/stable/) Python Imaging library for
+ creating captcha images
+
+Fonts from [Google Fonts](https://fonts.google.com/)

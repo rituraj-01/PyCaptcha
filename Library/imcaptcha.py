@@ -1,6 +1,5 @@
 import random
 import string
-from glob import glob
 from os import path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -79,6 +78,7 @@ class AddImage:
     def _add_noise(self, density=1000):
         def rand_int(start, end):
             return random.randint(start, end)
+
         line_x1 = rand_int(0, self.Width * .3)
         line_x2 = rand_int(self.Width * 0.60, self.Width)
         line_y1 = rand_int(self.Height * 0.25, self.Height * 0.75)
@@ -100,7 +100,7 @@ class AddImage:
 
 
 class ImageCaptcha(GenCaptchaString, AddImage):
-    def __init__(self, c_height=200, c_width=600, c_color="#B89843",
+    def __init__(self, c_height=80, c_width=240, c_color="#B89843",
                  font_type=None, font_color="WHITE", font_size=50,
                  string_length=6, string_constants=("U", "L", "D")):
         GenCaptchaString.__init__(self, string_length, string_constants)
@@ -108,13 +108,20 @@ class ImageCaptcha(GenCaptchaString, AddImage):
         self.Height = c_height
         self.Width = c_width
         self.rgb_colors = c_color
-        self.font_type = path.join(DATA_DIR, "Fonts", "InriaSerif-Regular.ttf")
+        self.font_type = self.select_font(font_type)
         self.font_color = font_color
         self.font_size = font_size
         self._Image = None
         self._Image_New = None
         self.Draw = None
         self.Image_Buf = None
+
+    @staticmethod
+    def select_font(font):
+        if font is None:
+            return path.join(DATA_DIR, "Fonts", "InriaSerif-Regular.ttf")
+        else:
+            return font
 
     def generate(self, captcha_string=None, noise_density=1000):
         if captcha_string is None:
