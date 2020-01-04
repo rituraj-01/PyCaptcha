@@ -2,11 +2,11 @@
 Image and Audio captcha generation using python
 
 ## ImgCaptcha
-    # Create an ImgCaptcha Instance
+Initialisation with captcha customisation arguments
+```
     image = ImgCaptcha()
-
-
-initiate with captcha customisation arguments
+```
+![Captcha Image Sample](Images/Captcha.png)
 
 ### Captcha Height and Width
     c_height=200, c_width=600, red=None,
@@ -34,6 +34,7 @@ provide a font path
 
 ### Show Captcha 
 To see the Captcha Image
+
     image.show_image()
 
 ## Audio Captcha Under Development
