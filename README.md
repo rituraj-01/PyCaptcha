@@ -6,7 +6,7 @@ Initialisation with captcha customisation arguments
 ```
     image = ImageCaptcha()
 ```
-![Captcha Image Sample](Images/Captcha.png)
+![Captcha Image Sample](Files/Captcha.png)
 
 ### Captcha Height and Width
     c_height=200, c_width=600
