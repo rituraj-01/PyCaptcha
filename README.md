@@ -73,6 +73,6 @@ Returns bytes
 Using [Pillow](https://pillow.readthedocs.io/en/stable/) Python Imaging library for
  creating captcha images
 
-For Speech to text using [gTTS](https://gtts.readthedocs.io/)
+For Text to Speech using [gTTS](https://gtts.readthedocs.io/)
 
 Fonts from [Google Fonts](https://fonts.google.com/)
