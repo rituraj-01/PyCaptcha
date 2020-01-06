@@ -63,7 +63,7 @@ Returns bytes
 
     image_byte = image.im_bytes(encoder="raw")
     
-## Audio Captcha Under Development
+## Audio Captcha
     text_to_speech = TextToSpeech(string_length=6, string_constants=("L", "D"))
     text_to_speech.gen_audio(filename="aud.mp3", captcha_string=None)
     
