@@ -1,37 +1,9 @@
 import random
-import string
 from os import path
-
+from gen_captcha import GenCaptchaString
 from PIL import Image, ImageDraw, ImageFont
 
 DATA_DIR = path.abspath(path.dirname(__file__))
-
-
-class GenCaptchaString:
-    def __init__(self, string_length, constants=("U", "L", "D")):
-        """
-        :param constants: The mixture of characters for captcha
-        """
-        self.string_length = string_length
-        self.constants = constants
-        self.string_constants = {
-            "U": string.ascii_uppercase,
-            "L": string.ascii_lowercase,
-            "D": string.digits,
-            "P": string.punctuation
-        }
-        self.all_string = ""
-        for case in self.constants:
-            self.all_string += self.string_constants[case]
-
-    def gen_random_str(self, length=6):
-        """
-        :param length: Length of Captcha
-        :return: Captcha String
-        """
-        captcha_string = ''.join(random.choices(self.all_string,
-                                                k=self.string_length))
-        return captcha_string
 
 
 class AddImage:

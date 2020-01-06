@@ -1,7 +1,7 @@
 # PyCaptcha
 Image and Audio captcha generation using python
 
-## ImgageCaptcha
+## Image Captcha
 Initialisation with captcha customisation arguments
 ```
     image = ImageCaptcha()
@@ -64,11 +64,15 @@ Returns bytes
     image_byte = image.im_bytes(encoder="raw")
     
 ## Audio Captcha Under Development
--------------------
-
+    text_to_speech = TextToSpeech(string_length=6, string_constants=("L", "D"))
+    text_to_speech.gen_audio(filename="aud.mp3", captcha_string=None)
+    
+---
 
 # Resources
 Using [Pillow](https://pillow.readthedocs.io/en/stable/) Python Imaging library for
  creating captcha images
+
+For Speech to text using [gTTS](https://gtts.readthedocs.io/)
 
 Fonts from [Google Fonts](https://fonts.google.com/)
