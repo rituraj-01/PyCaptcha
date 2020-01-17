@@ -75,8 +75,8 @@ class ImageCaptcha(CaptchaImager):
     def __init__(self, c_height=80, c_width=240, c_color="#B89843",
                  font_type=None, font_color="WHITE", font_size=50,
                  string_length=6, string_constants=("U", "L", "D")):
-        self.captcha_gen = GenCaptchaString(string_length, string_constants)
         super().__init__()
+        self.captcha_gen = GenCaptchaString(string_length, string_constants)
         self.Height = c_height
         self.Width = c_width
         self.rgb_colors = c_color
