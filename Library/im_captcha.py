@@ -1,6 +1,6 @@
 import random
 from os import path
-from gen_captcha import GenCaptchaString
+from gen_captcha import CaptchaGenerator
 from PIL import Image, ImageDraw, ImageFont
 
 DATA_DIR = path.abspath(path.dirname(__file__))
@@ -76,7 +76,7 @@ class ImageCaptcha(CaptchaImager):
                  font_type=None, font_color="WHITE", font_size=50,
                  string_length=6, string_constants=("U", "L", "D")):
         super().__init__()
-        self.captcha_gen = GenCaptchaString(string_length, string_constants)
+        self.generator_obj = CaptchaGenerator(string_length, string_constants)
         self.Height = c_height
         self.Width = c_width
         self.rgb_colors = c_color
@@ -97,7 +97,7 @@ class ImageCaptcha(CaptchaImager):
 
     def generate(self, captcha_string=None, noise_density=1000):
         if captcha_string is None:
-            captcha_string = self.captcha_gen.gen_random_str()
+            captcha_string = self.generator_obj.gen_random_str()
         self._Image = Image.new(mode='RGBA', size=(self.Width, self.Height),
                                 color=self.rgb_colors)
         letter_width = (self.Width // len(captcha_string))

@@ -2,7 +2,7 @@ import string
 from random import choices
 
 
-class GenCaptchaString:
+class CaptchaGenerator:
     def __init__(self, string_length, constants=("U", "L", "D")):
         """
         :param constants: The mixture of characters for captcha
